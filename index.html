@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>試写室</title>
+<style>
+:root{--bg:#f4f3ef;--card:#fff;--ink:#1c1b19;--sub:#6b6862;--line:#dedbd3;--ok:#16853f;--ng:#c62828;--fix:#b26a00;--field:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1f1e1c;--ink:#f1efe9;--sub:#a5a198;--line:#37352f;--ok:#35b86a;--ng:#ef5c5c;--fix:#e6a23c;--field:#292825}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Hiragino Sans","Yu Gothic UI",sans-serif;line-height:1.5}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 16px calc(10px);display:flex;align-items:center;gap:12px}
+h1{font-size:20px;margin:0;flex:1}
+#sum{font-size:14px;color:var(--sub);font-variant-numeric:tabular-nums}
+main{max-width:480px;margin:0 auto;padding:16px 16px 60vh}
+.who{display:block;font-size:14px;color:var(--sub);margin-bottom:16px}
+.who input{display:block;width:100%;margin-top:4px}
+input,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:10px;padding:12px}
+input:focus,textarea:focus{outline:2px solid var(--ink);outline-offset:0}
+article{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:24px;scroll-margin-top:64px}
+h2{font-size:17px;margin:0 0 10px;overflow-wrap:anywhere}
+.player{position:relative;width:100%;max-width:300px;margin:0 auto 12px;aspect-ratio:9/16;background:#000;border-radius:10px;overflow:hidden}
+.player iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.open{display:block;text-align:center;font-size:14px;color:var(--sub);margin-bottom:12px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.btns button{font:inherit;font-size:20px;font-weight:700;min-height:64px;border-radius:12px;border:2px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;touch-action:manipulation}
+.btns button:active{transform:scale(.97)}
+.btns .ok[aria-pressed=true]{background:var(--ok);border-color:var(--ok);color:#fff}
+.btns .ng[aria-pressed=true]{background:var(--ng);border-color:var(--ng);color:#fff}
+label.note{display:block;font-size:15px;font-weight:600;margin-bottom:6px}
+textarea{display:block;width:100%;min-height:120px;resize:vertical}
+.send{display:block;width:100%;margin-top:10px;min-height:56px;font:inherit;font-size:17px;font-weight:700;border:0;border-radius:12px;background:var(--ink);color:var(--bg);cursor:pointer;touch-action:manipulation}
+.send:disabled{opacity:.4}
+.meta{min-height:20px;margin:8px 0 0;font-size:13px;color:var(--sub)}
+.empty{color:var(--sub);text-align:center;padding:40px 0}
+#stamp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:20;opacity:0}
+#stamp span{font-size:min(42vw,220px);font-weight:900;line-height:1;padding:.1em .22em;border:.06em solid currentColor;border-radius:.16em;background:var(--card);box-shadow:0 12px 50px rgba(0,0,0,.35)}
+#stamp.on{animation:st 1s ease-out both}
+@keyframes st{0%{opacity:0;transform:scale(1.5)}14%{opacity:1;transform:scale(1)}70%{opacity:1}100%{opacity:0}}
+@media (prefers-reduced-motion:reduce){#stamp.on{animation:fd 1s linear both}@keyframes fd{0%,70%{opacity:1}100%{opacity:0}}}
+#toast{position:fixed;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:30;background:var(--ink);color:var(--bg);padding:14px;border-radius:12px;font-size:15px;text-align:center;display:none}
+#toast.err{background:var(--ng);color:#fff}
+#toast.on{display:block}
+</style>
+</head>
+<body>
+<header><h1>試写室</h1><div id="sum"></div></header>
+<main>
+  <label class="who">名前（任意）<input id="name" maxlength="40" autocomplete="name" placeholder="誰の判定か分かるように"></label>
+  <div id="list"></div>
+</main>
+<div id="stamp" aria-hidden="true"><span></span></div>
+<div id="toast" role="status"></div>
+<script>
+const API='https://firestore.googleapis.com/v1/projects/koyakki-shisha/databases/(default)/documents/reviews';
+const POLL_MS=8000;
+const $=s=>document.querySelector(s);
+const nameEl=$('#name');
+let items=[], reviews={}, cards={};
+
+function store(fn,fallback){try{return fn()}catch(e){return fallback}}
+nameEl.value=store(()=>localStorage.getItem('shisha-name')||'','');
+nameEl.addEventListener('input',()=>store(()=>localStorage.setItem('shisha-name',nameEl.value)));
+
+let toastTimer;
+function toast(msg,err){
+  const t=$('#toast');t.textContent=msg;t.className='on'+(err?' err':'');
+  clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.className='',err?5000:2000);
+}
+function stamp(text,color){
+  const s=$('#stamp'),b=s.firstElementChild;
+  b.textContent=text;b.style.color=color;
+  s.classList.remove('on');void s.offsetWidth;s.classList.add('on');
+}
+const cssv=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function parse(doc){
+  const f=doc.fields||{},v=k=>(f[k]&&f[k].stringValue)||'';
+  return {status:v('status'),note:v('note'),name:v('name'),title:v('title'),at:v('at')};
+}
+async function load(){
+  const r=await fetch(API+'?pageSize=300',{cache:'no-store'});
+  if(!r.ok)throw new Error('read '+r.status);
+  const j=await r.json(),next={};
+  (j.documents||[]).forEach(d=>{next[d.name.split('/').pop()]=parse(d)});
+  reviews=next;
+}
+// 他の人の入力を消さないよう、保存の直前に読み直して重ねる
+async function save(item,patch){
+  await load();
+  const cur=reviews[item.key]||{status:'',note:''};
+  const rec={status:cur.status,note:cur.note,...patch,name:nameEl.value.trim(),title:item.title.slice(0,100),at:new Date().toISOString()};
+  const fields={};
+  Object.keys(rec).forEach(k=>fields[k]={stringValue:rec[k]});
+  const r=await fetch(API+'/'+item.key,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({fields})});
+  if(!r.ok)throw new Error('write '+r.status);
+  reviews[item.key]=rec;
+}
+
+function build(item){
+  const a=document.createElement('article');a.id=item.key;
+  const h=document.createElement('h2');h.textContent=item.title;a.append(h);
+  const p=document.createElement('div');p.className='player';
+  const f=document.createElement('iframe');
+  f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(item.youtube)+'?playsinline=1&rel=0';
+  f.loading='lazy';f.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';f.allowFullscreen=true;f.title=item.title;
+  p.append(f);a.append(p);
+  const o=document.createElement('a');o.className='open';o.href='https://youtube.com/shorts/'+encodeURIComponent(item.youtube);o.target='_blank';o.rel='noopener';o.textContent='再生できないときはYouTubeで開く';a.append(o);
+  const b=document.createElement('div');b.className='btns';
+  const ok=document.createElement('button');ok.className='ok';ok.textContent='OK';
+  const ng=document.createElement('button');ng.className='ng';ng.textContent='ボツ';
+  b.append(ok,ng);a.append(b);
+  const l=document.createElement('label');l.className='note';l.textContent='直してほしいところ';
+  const t=document.createElement('textarea');t.placeholder='ここに書いて「コメントを送る」を押してください';t.maxLength=2000;l.append(t);a.append(l);
+  const s=document.createElement('button');s.className='send';s.textContent='コメントを送る';s.disabled=true;a.append(s);
+  const m=document.createElement('p');m.className='meta';a.append(m);
+
+  const c={ok,ng,t,s,m,dirty:false,busy:false};
+  cards[item.key]=c;
+  const press=async v=>{
+    if(c.busy)return;
+    const before=(reviews[item.key]||{}).status||'';
+    const next=before===v?'':v;
+    c.busy=true;
+    show(c,next,undefined);
+    if(next==='ok')stamp('OK',cssv('--ok'));
+    if(next==='ng')stamp('ボツ',cssv('--ng'));
+    try{await save(item,{status:next});if(!next)toast('判定を取り消しました')}
+    catch(e){toast('保存できませんでした。電波を確認してもう一度押してください',true);$('#stamp').classList.remove('on')}
+    c.busy=false;render();
+  };
+  ok.onclick=()=>press('ok');
+  ng.onclick=()=>press('ng');
+  t.addEventListener('input',()=>{c.dirty=t.value!==((reviews[item.key]||{}).note||'');s.disabled=!c.dirty});
+  t.addEventListener('focus',()=>setTimeout(()=>t.scrollIntoView({block:'center',behavior:'smooth'}),300));
+  s.onclick=async()=>{
+    s.disabled=true;s.textContent='送信中…';
+    try{await save(item,{note:t.value.trim()});c.dirty=false;toast('コメントを保存しました');t.blur()}
+    catch(e){toast('送れませんでした。文章は残っています。もう一度押してください',true);s.disabled=false}
+    s.textContent='コメントを送る';render();
+  };
+  return a;
+}
+function show(c,status){
+  c.ok.setAttribute('aria-pressed',status==='ok');
+  c.ng.setAttribute('aria-pressed',status==='ng');
+}
+function render(){
+  let nOk=0,nNg=0;
+  items.forEach(it=>{
+    const r=reviews[it.key]||{},c=cards[it.key];
+    if(r.status==='ok')nOk++;if(r.status==='ng')nNg++;
+    if(!c.busy)show(c,r.status||'');
+    if(!c.dirty&&document.activeElement!==c.t)c.t.value=r.note||'';
+    let d='';
+    if(r.at){const w=new Date(r.at);d=(r.name||'名前なし')+'・'+(w.getMonth()+1)+'/'+w.getDate()+' '+w.getHours()+':'+String(w.getMinutes()).padStart(2,'0')}
+    c.m.textContent=d;
+  });
+  $('#sum').textContent='OK '+nOk+'／ボツ '+nNg+'／全'+items.length;
+}
+async function tick(){
+  if(document.hidden||Object.values(cards).some(c=>c.busy))return;
+  try{await load();render()}catch(e){}
+}
+async function init(){
+  try{
+    const r=await fetch('items.json?'+Date.now(),{cache:'no-store'});
+    items=await r.json();
+  }catch(e){$('#list').textContent='読み込めませんでした。開き直してください。';return}
+  const list=$('#list');
+  if(!items.length){list.innerHTML='<p class="empty">今は確認する動画がありません</p>'}
+  items.forEach(it=>list.append(build(it)));
+  try{await load()}catch(e){toast('判定を読み込めませんでした',true)}
+  render();
+  setInterval(tick,POLL_MS);
+  document.addEventListener('visibilitychange',tick);
+}
+init();
+</script>
+</body>
+</html>
