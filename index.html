@@ -29,6 +29,9 @@ h2{font-size:17px;margin:0 0 10px;overflow-wrap:anywhere}
 .btns button:active{transform:scale(.97)}
 .btns .ok[aria-pressed=true]{background:var(--ok);border-color:var(--ok);color:#fff}
 .btns .ng[aria-pressed=true]{background:var(--ng);border-color:var(--ng);color:#fff}
+.prev{border-left:4px solid var(--fix);background:color-mix(in srgb,var(--fix) 10%,transparent);border-radius:8px;padding:10px 12px;margin:0 0 12px}
+.prev h3{margin:0 0 4px;font-size:14px;color:var(--fix)}
+.prev p{margin:0;white-space:pre-wrap;font-size:15px;line-height:1.6}
 label.note{display:block;font-size:15px;font-weight:600;margin-bottom:6px}
 textarea{display:block;width:100%;min-height:120px;resize:vertical}
 .send{display:block;width:100%;margin-top:10px;min-height:56px;font:inherit;font-size:17px;font-weight:700;border:0;border-radius:12px;background:var(--ink);color:var(--bg);cursor:pointer;touch-action:manipulation}
@@ -102,6 +105,12 @@ async function save(item,patch){
 function build(item){
   const a=document.createElement('article');a.id=item.key;
   const h=document.createElement('h2');h.textContent=item.title;a.append(h);
+  if(item.prev){
+    const pv=document.createElement('section');pv.className='prev';
+    const ph=document.createElement('h3');ph.textContent='前回の修正指示';
+    const pt=document.createElement('p');pt.textContent=item.prev;
+    pv.append(ph,pt);a.append(pv);
+  }
   const p=document.createElement('div');p.className='player';
   const f=document.createElement('iframe');
   f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(item.youtube)+'?playsinline=1&rel=0';
