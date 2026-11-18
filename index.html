@@ -142,7 +142,7 @@ const LABEL={ok:'OK',ng:'ボツ'};
 const FILTERS=[['all','すべて'],['none','未チェック'],['ok','OK'],['ng','ボツ']];
 let items=[],reviews={},filter='all',list=[],current=-1,nextT;
 const st=k=>(reviews[k]&&reviews[k].status)||'';
-const ep=i=>{const m=i.title.match(/^[①-⑳]?\s*(\S+?回)/);return m?m[1]:'その他'};
+const ep=i=>{if(i.group)return i.group;const m=i.title.match(/^[①-⑳]?\s*(\S+?回)/);return m?m[1]:'その他'};
 
 try{$('name').value=localStorage.getItem('shisha_name')||''}catch(e){}
 $('name').addEventListener('change',()=>{try{localStorage.setItem('shisha_name',$('name').value)}catch(e){}});
