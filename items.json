@@ -1,20 +1,77 @@
 [
-  {"key": "shimada1f", "title": "①島田秀平回 パワースポットブームの生みの親【修正版】", "youtube": "XFFoRbA8m-4", "prev": "顔とテロップ被ってるのでもう少しあげて欲しいです！"},
-  {"key": "shimada2f", "title": "②島田秀平回 お守りを手にした瞬間レギュラー決定【修正版】", "youtube": "qYnFTprU1L0", "prev": "「パワースポットってこれがあるんですよね」\nを冒頭に持ってきてほしいです。\nそれ以降は同じ内容でOKです"},
-  {"key": "shimada3f", "title": "③島田秀平回 人生で1度だけ願いが叶うお守り【修正版】", "youtube": "ac2vDf-VUIA", "prev": "冒頭3秒カット\n「ひとつ叶えたい願いを〜」からスタート"},
-  {"key": "shimada6f", "title": "⑥島田秀平回 善光寺の仏像を奪った武将の末路【修正版】", "youtube": "ywlrytjjejs", "prev": "⑤のショートの\n「えげつないパワーを持っている」を冒頭に持ってきてください\n\n「なぜか43年間だけ善光寺にいられなかった時代がある」カット\n\n全体的にカット詰めてテンポ良くして欲しいです"},
-  {"key": "shimada7f", "title": "⑦島田秀平回 妊娠中の妻の写真に写っていたもの【修正版】", "youtube": "u-Kih4RSa6E", "prev": "（LINEでの指示）\n動画のタイミングに合わせて4枚の画像を1枚ずつ差し込んで欲しいです！"},
-  {"key": "shimada8", "title": "⑧島田秀平回 善光寺の仏像を奪った秀吉の最期", "youtube": "INNi0INL3Ss"},
-  {"key": "shimada9", "title": "⑨島田秀平回 妻のおみくじに書かれた一文字", "youtube": "nP2RgYwTMdo"},
-  {"key": "shimada10", "title": "⑩島田秀平回 おすすめ1位は意外な神様", "youtube": "or_tsp2i1kM"},
-  {"key": "shimada11", "title": "⑪島田秀平回 人生を変えた道開きの神様", "youtube": "orWFwo3QP2g"},
-  {"key": "shimada12", "title": "⑫島田秀平回 「呼吸」に隠された開運の順番", "youtube": "lSkZMeKxSt0"},
-  {"key": "nedo2f", "title": "②ネドじゅん回 ネガティブ思考は脳を悪くする【修正版】", "youtube": "0rck4gvm2Uk", "prev": "ネガティブ思考は\n脳を悪くする！？\n\n上のテロップ変更お願いします\n（下の黒も小さくしました）"},
-  {"key": "nedo3f", "title": "③ネドじゅん回 頭の中の声を信じるな【修正版】", "youtube": "ylCOuAb9mWk", "prev": "冒頭8秒カット\n「頭の中の声を信じない」からスタート"},
-  {"key": "nedo5f", "title": "⑤ネドじゅん回 頭痛・不眠の原因は文字が多すぎる【修正版】", "youtube": "EjQASnW233A", "prev": "下の黒の面積少し小さくして欲しいです\n\n全体的にカット詰めてください"},
-  {"key": "aiu1f", "title": "①AI占い回 AIに「ありがとう」言うと危険【修正版】", "youtube": "gFQm_r0-B9k", "prev": "（LINEでの指示）\n冒頭「ありがとうと言わない」の後の間を詰めてください\n\n下の黒の面積少し小さくして欲しいです"},
-  {"key": "aiu2k", "title": "②AI占い回 AIに依存する人ほど仕事で成果が出ない【黒調整】", "youtube": "usMbCIR15nk", "badge": "黒だけ調整", "group": "AI占い回"},
-  {"key": "dan2f", "title": "②断捨離回 使わない家電が金運を下げる理由【修正版】", "youtube": "OUjVgx2Dfsg", "prev": "下の黒の面積少し小さくして欲しいです"},
-  {"key": "nedo1k", "title": "①ネドじゅん回 頭の中の声はゴシップ週刊誌【黒調整】", "youtube": "FDxVa4zEIfs", "badge": "黒だけ調整", "prev": "初稿でOK（修正なし）。\n全体の指示「下の黒い部分の面積が広い」に合わせて、黒だけ小さくしました。中身は同じです。", "group": "黒だけ調整（初稿OK・中身は同じ）"},
-  {"key": "aiu3k", "title": "③AI占い回 AIに相談した秘密 全部漏れる【黒調整】", "youtube": "fULoFwgLvdE", "badge": "黒だけ調整", "prev": "（LINEで）OK・修正なし。\n全体の指示「下の黒い部分の面積が広い」に合わせて、黒だけ小さくしました。中身は同じです。", "group": "黒だけ調整（初稿OK・中身は同じ）"}
+ {
+  "key": "shimada6g",
+  "title": "⑥島田秀平回 善光寺の仏像を奪った武将の末路【修正版2】",
+  "youtube": "7YJA8HPiym4",
+  "prev": "冒頭「ここに祀られてるご本尊が」カット"
+ },
+ {
+  "key": "shimada10f",
+  "title": "⑩島田秀平回 おすすめ1位は意外な神様【修正版】",
+  "youtube": "oHxkfgsAIk8",
+  "prev": "0:12あたりの一瞬映るシーンカット"
+ },
+ {
+  "key": "shimada11",
+  "title": "⑪島田秀平回 人生を変えた道開きの神様",
+  "youtube": "orWFwo3QP2g"
+ },
+ {
+  "key": "shimada12",
+  "title": "⑫島田秀平回 「呼吸」に隠された開運の順番",
+  "youtube": "lSkZMeKxSt0"
+ },
+ {
+  "key": "nedo2f",
+  "title": "②ネドじゅん回 ネガティブ思考は脳を悪くする【修正版】",
+  "youtube": "0rck4gvm2Uk",
+  "prev": "ネガティブ思考は\n脳を悪くする！？\n\n上のテロップ変更お願いします\n（下の黒も小さくしました）"
+ },
+ {
+  "key": "nedo3f",
+  "title": "③ネドじゅん回 頭の中の声を信じるな【修正版】",
+  "youtube": "ylCOuAb9mWk",
+  "prev": "冒頭8秒カット\n「頭の中の声を信じない」からスタート"
+ },
+ {
+  "key": "nedo5f",
+  "title": "⑤ネドじゅん回 頭痛・不眠の原因は文字が多すぎる【修正版】",
+  "youtube": "EjQASnW233A",
+  "prev": "下の黒の面積少し小さくして欲しいです\n\n全体的にカット詰めてください"
+ },
+ {
+  "key": "aiu1f",
+  "title": "①AI占い回 AIに「ありがとう」言うと危険【修正版】",
+  "youtube": "gFQm_r0-B9k",
+  "prev": "（LINEでの指示）\n冒頭「ありがとうと言わない」の後の間を詰めてください\n\n下の黒の面積少し小さくして欲しいです"
+ },
+ {
+  "key": "aiu2k",
+  "title": "②AI占い回 AIに依存する人ほど仕事で成果が出ない【黒調整】",
+  "youtube": "usMbCIR15nk",
+  "badge": "黒だけ調整",
+  "group": "AI占い回"
+ },
+ {
+  "key": "dan2f",
+  "title": "②断捨離回 使わない家電が金運を下げる理由【修正版】",
+  "youtube": "OUjVgx2Dfsg",
+  "prev": "下の黒の面積少し小さくして欲しいです"
+ },
+ {
+  "key": "nedo1k",
+  "title": "①ネドじゅん回 頭の中の声はゴシップ週刊誌【黒調整】",
+  "youtube": "FDxVa4zEIfs",
+  "badge": "黒だけ調整",
+  "prev": "初稿でOK（修正なし）。\n全体の指示「下の黒い部分の面積が広い」に合わせて、黒だけ小さくしました。中身は同じです。",
+  "group": "黒だけ調整（初稿OK・中身は同じ）"
+ },
+ {
+  "key": "aiu3k",
+  "title": "③AI占い回 AIに相談した秘密 全部漏れる【黒調整】",
+  "youtube": "fULoFwgLvdE",
+  "badge": "黒だけ調整",
+  "prev": "（LINEで）OK・修正なし。\n全体の指示「下の黒い部分の面積が広い」に合わせて、黒だけ小さくしました。中身は同じです。",
+  "group": "黒だけ調整（初稿OK・中身は同じ）"
+ }
 ]
